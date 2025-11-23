@@ -1,22 +1,24 @@
 package it.unibo.mvc;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Implementation of the controller and the app entry point.
  */
 public final class DrawNumberApp implements DrawNumberViewObserver {
-    private static final int MIN = 0;
-    private static final int MAX = 100;
-    private static final int ATTEMPTS = 10;
-
+    private static final String DEFAULT_CONFIG_PATH = "config.yml";
+    private final Configuration config; 
     private final DrawNumber model;
     private final List<DrawNumberView> views;
 
     /**
      * @param views
      *            the views to attach
+     * @throws IOException 
+     *            if the file is not found
      */
     public DrawNumberApp(final DrawNumberView... views) {
         /*
@@ -27,7 +29,15 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.setObserver(this);
             view.start();
         }
-        this.model = new DrawNumberImpl(MIN, MAX, ATTEMPTS);
+
+        try {
+            this.config = ConfigurationResourceLoader.loadConfiguration(DEFAULT_CONFIG_PATH);
+        } catch (IOException e) {
+            this.views.forEach(view -> {
+                view.displayError(e.getMessage());
+            });
+        }
+        this.model = new DrawNumberImpl(config.getMin(), config.getMax(), config.getAttempts());
     }
 
     @Override
