@@ -21,7 +21,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      * @throws IOException 
      *            if the file is not found
      */
-    public DrawNumberApp(final DrawNumberView... views) throws IOException {
+    public DrawNumberApp(final DrawNumberView... views) {
         /*
          * Side-effect proof
          */
@@ -37,7 +37,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             this.views.forEach(view -> {
                 view.displayError(e.getMessage());
             });
-                config = new Configuration.Builder().build();
+            config = new Configuration.Builder().build();
         }
         this.model = new DrawNumberImpl(config.getMin(), config.getMax(), config.getAttempts());
     }
@@ -85,9 +85,8 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
                 new PrintStreamView(System.out),
                 new PrintStreamView(System.getProperty("user.home") + File.separator + ".drawNumberConfig")
             );
-        } catch (IOException e) {
-
+        } catch (final FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
-
 }
