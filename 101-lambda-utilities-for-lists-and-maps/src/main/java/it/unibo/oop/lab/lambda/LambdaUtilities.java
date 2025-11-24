@@ -1,18 +1,19 @@
 package it.unibo.oop.lab.lambda;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * This class will contain four utility functions on lists and maps, of which the first one is provided as example.
@@ -39,12 +40,12 @@ public final class LambdaUtilities {
      *         a processed version
      */
     public static <T> List<T> dup(final List<T> list, final UnaryOperator<T> op) {
-        final List<T> l = new ArrayList<>(list.size() * 2);
-        list.forEach(t -> {
-            l.add(t);
-            l.add(op.apply(t));
-        });
-        return l;
+        // final List<T> l = new ArrayList<>(list.size() * 2);
+        // list.forEach(t -> {
+        //     l.add(t);
+        //     l.add(op.apply(t));
+        // });
+        return list.stream().flatMap(it -> Stream.of(it, op.apply(it))).toList();
     }
 
     /**
@@ -62,11 +63,12 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Optional.filter
          */
-        final List<Optional<T>> l = new ArrayList<>(list.size());
-        list.forEach(t -> {
-            l.add(Optional.of(t).filter(pre)); 
-        });
-        return l;
+        return list.stream().map(Optional::ofNullable).map(it -> it.filter(pre)).toList();
+        // final List<Optional<T>> l = new ArrayList<>(list.size());
+        // list.forEach(t -> {
+        //     l.add(Optional.of(t).filter(pre)); 
+        // });
+        // return l;
     }
 
     /**
@@ -85,11 +87,15 @@ public final class LambdaUtilities {
         /*
          * Suggestion: consider Map.merge
          */
-        final Map<R, Set<T>> m = new HashMap<>();
+        // list.stream()
+        //     .collect(Collectors.groupingBy(op))
+        //     .entrySet().stream()
+        //     .map(entry -> entry.setValue(new LinkedHashSet<>(entry.getValue()))).collect());
+        final Map<R, Set<T>> m = new LinkedHashMap<>();
         list.forEach(t -> {
             m.merge(
                 op.apply(t),
-                new TreeSet<>(Set.of(t)),
+                new LinkedHashSet<>(Set.of(t)),
                 (a, b) -> {
                     a.addAll(b);
                     return a;
@@ -117,7 +123,7 @@ public final class LambdaUtilities {
          *
          * Keep in mind that a map can be iterated through its forEach method
          */
-        final Map<K, V> m = new HashMap<>();
+        final Map<K, V> m = new LinkedHashMap<>();
         map.forEach((k, v) -> {
             m.put(k, v.orElse(def.get()));
         });
