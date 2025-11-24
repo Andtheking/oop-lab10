@@ -17,11 +17,13 @@ public final class ConfigurationResourceLoader {
     private ConfigurationResourceLoader() {
 
     }
+
     /**
      * Loads configuration from a resource name.
      * 
-     * @param resourceName the name of the resource that as the game configuration.
-     * @throws IOException if there is an error with loading the config file.
+     * @param resourceName the name of the resource that as the game configuration
+     * @return {@link Configuration} the configuration loaded from file
+     * @throws IOException if there is an error with loading the config file
      */
     public static Configuration loadConfiguration(final String resourceName) throws IOException {
         final Configuration.Builder builder = new Configuration.Builder(); 
@@ -29,7 +31,7 @@ public final class ConfigurationResourceLoader {
         if (is == null) {
             throw new FileNotFoundException("The configuration file was not found.");
         }
-        try (final BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"))) {
             br.lines().forEach(line -> {
                 final StringTokenizer st = new StringTokenizer(line, ":");
                 if (st.countTokens() != 2 && st.countTokens() != 0) {
@@ -41,7 +43,7 @@ public final class ConfigurationResourceLoader {
                     case "minimum" -> builder.setMin(value);
                     case "maximum" -> builder.setMax(value);
                     case "attempts" -> builder.setAttempts(value);
-                    default -> {}
+                    default -> { }
                 }
             });
         }

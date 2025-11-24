@@ -3,7 +3,7 @@ package it.unibo.mvc;
 /**
  * Possible outcomes of a guess.
  * 
- * Here implemented as enum, but a configuration file would be MUCH more effective.
+ * <p>Here implemented as enum, but a configuration file would be MUCH more effective.</p>
  */
 public enum DrawResult {
 

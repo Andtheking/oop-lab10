@@ -1,12 +1,10 @@
-/**
- * 
- */
 package it.unibo.mvc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * This class implements a view that can write on any PrintStream.
@@ -21,17 +19,17 @@ public final class PrintStreamView implements DrawNumberView {
      * @param stream the {@link PrintStream} where to write
      */
     public PrintStreamView(final PrintStream stream) {
-        out = stream;
+        out = new PrintStream(stream, false, StandardCharsets.UTF_8); // safe copy
     }
 
     /**
      * Builds a {@link PrintStreamView} that writes on file, given a path.
      * 
      * @param path a file path
-     * @throws FileNotFoundException 
+     * @throws FileNotFoundException if output file is not found
      */
     public PrintStreamView(final String path) throws FileNotFoundException {
-        out = new PrintStream(new FileOutputStream(new File(path)));
+        out = new PrintStream(new FileOutputStream(new File(path)), false, StandardCharsets.UTF_8);
     }
 
     @Override
@@ -59,9 +57,8 @@ public final class PrintStreamView implements DrawNumberView {
     }
 
     @Override
-    public void displayError(String message) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'displayError'");
+    public void displayError(final String message) {
+        out.println("ERROR: " + message);
     }
 
 }

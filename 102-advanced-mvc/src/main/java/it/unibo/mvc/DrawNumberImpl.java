@@ -15,6 +15,12 @@ public final class DrawNumberImpl implements DrawNumber {
     private final Random random = new Random();
 
     /**
+     * @param min
+     *          The minimum number that can be drawn
+     * @param max 
+     *          The maximum number that can be drawn
+     * @param attempts
+     *          Number of attempts to guess the number
      * @throws IllegalStateException if the configuration is not consistent
      */
     public DrawNumberImpl(final int min, final int max, final int attempts) {
@@ -24,12 +30,18 @@ public final class DrawNumberImpl implements DrawNumber {
         this.reset();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reset() {
         this.remainingAttempts = this.attempts;
         this.choice = this.min + random.nextInt(this.max - this.min + 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DrawResult attempt(final int n) {
         if (this.remainingAttempts <= 0) {

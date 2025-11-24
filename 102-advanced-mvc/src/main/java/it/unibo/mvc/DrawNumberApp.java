@@ -1,5 +1,6 @@
 package it.unibo.mvc;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public final class DrawNumberApp implements DrawNumberViewObserver {
     private static final String DEFAULT_CONFIG_PATH = "config.yml";
-    private final Configuration config; 
+
     private final DrawNumber model;
     private final List<DrawNumberView> views;
 
@@ -20,7 +21,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      * @throws IOException 
      *            if the file is not found
      */
-    public DrawNumberApp(final DrawNumberView... views) {
+    public DrawNumberApp(final DrawNumberView... views) throws IOException {
         /*
          * Side-effect proof
          */
@@ -29,13 +30,14 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             view.setObserver(this);
             view.start();
         }
-
+        Configuration config;
         try {
-            this.config = ConfigurationResourceLoader.loadConfiguration(DEFAULT_CONFIG_PATH);
-        } catch (IOException e) {
+            config = ConfigurationResourceLoader.loadConfiguration(DEFAULT_CONFIG_PATH);
+        } catch (final IOException e) {
             this.views.forEach(view -> {
                 view.displayError(e.getMessage());
             });
+                config = new Configuration.Builder().build();
         }
         this.model = new DrawNumberImpl(config.getMin(), config.getMax(), config.getAttempts());
     }
@@ -47,7 +49,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
             for (final DrawNumberView view: views) {
                 view.result(result);
             }
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             for (final DrawNumberView view: views) {
                 view.numberIncorrect();
             }
@@ -74,9 +76,18 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      * @param args
      *            ignored
      * @throws FileNotFoundException 
+     *            if the default configuration file is not found
      */
-    public static void main(final String... args) throws FileNotFoundException {
-        new DrawNumberApp(new DrawNumberViewImpl());
+    public static void main(final String... args) {
+        try {
+            new DrawNumberApp(
+                new DrawNumberViewImpl(),
+                new PrintStreamView(System.out),
+                new PrintStreamView(System.getProperty("user.home") + File.separator + ".drawNumberConfig")
+            );
+        } catch (IOException e) {
+
+        }
     }
 
 }
