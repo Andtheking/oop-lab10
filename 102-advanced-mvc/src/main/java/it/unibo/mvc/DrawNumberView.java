@@ -1,11 +1,13 @@
 package it.unibo.mvc;
 
 /**
- *
+ * View interface for the Draw Number game.
  */
 public interface DrawNumberView {
 
     /**
+     * Sets the observer/controller for this view.
+     *
      * @param observer the controller to attach
      */
     void setObserver(DrawNumberViewObserver observer);
@@ -21,6 +23,8 @@ public interface DrawNumberView {
     void numberIncorrect();
 
     /**
+     * Informs the user about the result of the last draw.
+     *
      * @param res the result of the last draw
      */
     void result(DrawResult res);

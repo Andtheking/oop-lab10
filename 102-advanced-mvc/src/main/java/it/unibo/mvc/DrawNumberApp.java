@@ -1,5 +1,7 @@
 package it.unibo.mvc;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,6 +18,8 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     private final List<DrawNumberView> views;
 
     /**
+     * Constructor.
+     *
      * @param views
      *            the views to attach
      * @throws IOException 
@@ -62,6 +66,10 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     }
 
     @Override
+    @SuppressFBWarnings(
+        value = "DM_EXIT",
+        justification = "Acceptable for exercising purposes."
+    )
     public void quit() {
         /*
          * A bit harsh. A good application should configure the graphics to exit by
@@ -73,6 +81,8 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
     }
 
     /**
+     * Application entry point.
+     *
      * @param args
      *            ignored
      * @throws FileNotFoundException 
@@ -86,7 +96,7 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
                 new PrintStreamView(System.getProperty("user.home") + File.separator + ".drawNumberConfig")
             );
         } catch (final FileNotFoundException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // NOPMD Accepted by tutor
         }
     }
 }

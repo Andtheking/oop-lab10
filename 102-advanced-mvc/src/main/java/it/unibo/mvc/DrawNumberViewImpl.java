@@ -26,7 +26,7 @@ public final class DrawNumberViewImpl implements DrawNumberView {
     private final JFrame frame = new JFrame(FRAME_NAME);
 
     /**
-     * 
+     * Constructor.
      */
     public DrawNumberViewImpl() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -108,8 +108,6 @@ public final class DrawNumberViewImpl implements DrawNumberView {
         case YOU_LOST:
             JOptionPane.showMessageDialog(frame, res.getDescription() + NEW_GAME, "Lost", JOptionPane.WARNING_MESSAGE);
             break;
-        default:
-            throw new IllegalStateException("Unexpected result: " + res);
         }
         observer.resetGame();
     }

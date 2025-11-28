@@ -2,8 +2,7 @@ package it.unibo.mvc;
 
 /**
  * Possible outcomes of a guess.
- * 
- * <p>Here implemented as enum, but a configuration file would be MUCH more effective.</p>
+ * Here implemented as enum, but a configuration file would be MUCH more effective.
  */
 public enum DrawResult {
 
@@ -31,6 +30,8 @@ public enum DrawResult {
     }
 
     /**
+     * Translates the draw result to a human-readable description.
+     *
      * @return a description of the draw result
      */
     public String getDescription() {

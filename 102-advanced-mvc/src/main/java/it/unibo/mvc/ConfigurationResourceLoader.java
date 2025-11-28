@@ -40,9 +40,9 @@ public final class ConfigurationResourceLoader {
                 final String key = st.nextToken();
                 final int value = Integer.parseInt(st.nextToken().trim());
                 switch (key) {
-                    case "minimum" -> builder.setMin(value);
-                    case "maximum" -> builder.setMax(value);
-                    case "attempts" -> builder.setAttempts(value);
+                    case "minimum" -> builder.withMin(value);
+                    case "maximum" -> builder.withMax(value);
+                    case "attempts" -> builder.withAttempts(value);
                     default -> { }
                 }
             });
